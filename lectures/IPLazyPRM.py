@@ -24,22 +24,6 @@ class LazyPRM(PRMBase):
         self.collidingEdges = []
         self.nonCollidingEdges = []
 
-    def setSamplingBounds(self, bounds):
-        """bounds = ((x_min, x_max), (y_min, y_max))"""
-        self.samplingBounds = bounds
-
-    def _getRandomPosition(self):
-        if hasattr(self, 'samplingBounds'):
-            (x_min, x_max), (y_min, y_max) = self.samplingBounds
-        else:
-            (x_min, x_max), (y_min, y_max) = (0, 22), (0, 22)  # Default fallback
-
-        for _ in range(100):
-            pos = [random.uniform(x_min, x_max), random.uniform(y_min, y_max)]
-            if not self._collisionChecker.pointInCollision(pos):
-                return pos
-        raise RuntimeError("Could not find a collision-free sample in bounds")
-
     @IPPerfMonitor
     def _buildRoadmap(self, numNodes, kNearest):
 
