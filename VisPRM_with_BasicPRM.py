@@ -16,5 +16,6 @@ class VisPRM_with_BasicPRM(HierarchicalPRMBase):
         return {
             "radius": 1.0,
             "numNodes": 20,
-            "useKDTree": True
+            "useKDTree": True,
+            "debug": True
         }

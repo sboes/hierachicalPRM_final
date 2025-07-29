@@ -17,5 +17,6 @@ class VisPRM_with_LazyPRM(HierarchicalPRMBase):
             "initialRoadmapSize": 15,
             "updateRoadmapSize": 5,
             "kNearest": 5,
-            "maxIterations": 10
+            "maxIterations": 10,
+            "debug": True
         }

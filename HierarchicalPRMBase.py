@@ -44,12 +44,12 @@ class HierarchicalPRMBase(PRMBase):
 
     def _getInternalPlannerConfig(self):
         return {
-            "radius": 1.0,
+            "radius": 5.0,
             "numNodes": 20,
             "useKDTree": True,
             "initialRoadmapSize": 15,
             "updateRoadmapSize": 5,
-            "kNearest": 5,
+            "kNearest": 8,
             "maxIterations": 10
         }
 
