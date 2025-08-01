@@ -15,10 +15,12 @@ def generate_consistent_joint_config(dim, total_angle=0.0, curvature=0.0):
 
 def planarRobotVisualize(robot, ax, color='blue'):
     """Visualisiert den planaren Roboter."""
-    points = robot.getEndpointPositions()
+    # statt getEndpointPositions() verwenden wir die in PlanarRobot definierte Methode:
+    points = robot.get_transforms()
     x_coords = [float(point[0]) for point in points]
     y_coords = [float(point[1]) for point in points]
     ax.plot(x_coords, y_coords, '-o', color=color)
+
 
 
 def setup(n_dof: int, obst=None, total_length=3.5, roadmap_size=100, iterations=50):
