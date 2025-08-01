@@ -6,8 +6,8 @@ This code is part of the course "Introduction to robot path planning" (Author: B
 License is based on Creative Commons: Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) (pls. check: http://creativecommons.org/licenses/by-nc/4.0/)
 """
 
-from . import IPPRMBase
-from .IPPerfMonitor import IPPerfMonitor
+from lectures import IPPRMBase
+from lectures.IPPerfMonitor import IPPerfMonitor
 import networkx as nx
 import random
 
@@ -20,6 +20,22 @@ class BasicPRM(IPPRMBase.PRMBase):
     def __init__(self, _collChecker):
         super(BasicPRM, self).__init__(_collChecker)
         self.graph = nx.Graph()
+
+    def setSamplingBounds(self, bounds):
+        """bounds = ((x_min, x_max), (y_min, y_max))"""
+        self.samplingBounds = bounds
+
+    def _getRandomFreePosition(self):
+        if hasattr(self, 'samplingBounds'):
+            (x_min, x_max), (y_min, y_max) = self.samplingBounds
+        else:
+            (x_min, x_max), (y_min, y_max) = (0, 22), (0, 22)
+
+        for _ in range(100):
+            pos = [random.uniform(x_min, x_max), random.uniform(y_min, y_max)]
+            if not self._collisionChecker.pointInCollision(pos):
+                return pos
+        raise RuntimeError("Could not find a valid free position in bounds")
 
     @IPPerfMonitor
     def _inSameConnectedComponent(self, node1, node2):
@@ -120,19 +136,3 @@ class BasicPRM(IPPRMBase.PRMBase):
         except:
             return []
         return path
-
-    '''    def setSamplingBounds(self, bounds):
-        """bounds = ((x_min, x_max), (y_min, y_max))"""
-        self.samplingBounds = bounds
-
-    def _getRandomFreePosition(self):
-        if hasattr(self, 'samplingBounds'):
-            (x_min, x_max), (y_min, y_max) = self.samplingBounds
-        else:
-            (x_min, x_max), (y_min, y_max) = (0, 22), (0, 22)
-
-        for _ in range(100):
-            pos = [random.uniform(x_min, x_max), random.uniform(y_min, y_max)]
-            if not self._collisionChecker.pointInCollision(pos):
-                return pos
-        raise RuntimeError("Could not find a valid free position in bounds")'''

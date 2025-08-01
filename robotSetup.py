@@ -1,14 +1,27 @@
 import numpy as np
-import sympy as sp
 import matplotlib.pyplot as plt
 from shapely.geometry import LineString
-from lectures.IPPlanarManipulator import PlanarRobot, generate_consistent_joint_config
-from lectures.IPEnvironmentKin import KinChainCollisionChecker, planarRobotVisualize, animateSolution
-import IPLazyPRM
-import IPVISLazyPRM
+import sympy as sp
+from lectures.IPPlanarManipulator import PlanarRobot
+from lectures.IPEnvironmentKin import KinChainCollisionChecker
 
 
-def setup_and_plan(n_dof: int, obst=None, total_length=3.5, roadmap_size=100, iterations=50):
+def generate_consistent_joint_config(dim, total_angle=0.0, curvature=0.0):
+    """Generiert eine konsistente Gelenkwinkelkonfiguration."""
+    base = np.ones(dim) * (total_angle / dim)
+    curve = np.linspace(-curvature, curvature, dim)
+    return base + curve
+
+
+def planarRobotVisualize(robot, ax, color='blue'):
+    """Visualisiert den planaren Roboter."""
+    points = robot.getEndpointPositions()
+    x_coords = [float(point[0]) for point in points]
+    y_coords = [float(point[1]) for point in points]
+    ax.plot(x_coords, y_coords, '-o', color=color)
+
+
+def setup(n_dof: int, obst=None, total_length=3.5, roadmap_size=100, iterations=50):
     """Erstellt Roboter mit n_dof in fixer Testumgebung, führt LazyPRM durch und visualisiert."""
 
     # Falls keine Hindernisse übergeben wurden → Standardhindernisse
@@ -41,19 +54,4 @@ def setup_and_plan(n_dof: int, obst=None, total_length=3.5, roadmap_size=100, it
     r.move(sp.Matrix(end_joint_angles))
     planarRobotVisualize(r, ax)
 
-    # Planen mit LazyPRM
-    lazyPRM = IPLazyPRM.LazyPRM(environment)
-    lazyConfig = dict(
-        initialRoadmapSize=roadmap_size,
-        updateRoadmapSize=roadmap_size // 3,
-        kNearest=15,
-        maxIterations=iterations,
-    )
-
-    solution = lazyPRM.planPath(start, goal, lazyConfig)
-    print(f"Solution for {n_dof}-DoF robot:", solution)
-
-    # Animation
-    animateSolution(lazyPRM, environment, solution, IPVISLazyPRM.lazyPRMVisualize, workSpaceLimits=[[-3, 3], [-3, 3]])
-
-    return solution
+    return r, environment, start, goal, fig_local, ax

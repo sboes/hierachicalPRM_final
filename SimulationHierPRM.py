@@ -39,8 +39,8 @@ class ShapelyCollisionChecker:
 checker = ShapelyCollisionChecker(obstacles)
 
 # --- IMPORTIERE SUBPLANNER UND HIERARCHICAL PRM ---
-from lectures.IPLazyPRM import LazyPRM
-from lectures.IPBasicPRM import BasicPRM
+from planners.IPLazyPRM import LazyPRM
+from planners.IPBasicPRM import BasicPRM
 from SimClass import HierarchicalPRM
 
 # --- DEFAULT-KONFIG ---

@@ -25,3 +25,5 @@ class CollisionChecker:
     def line_in_collision(self, p1, p2):
         line = LineString([p1, p2])
         return any(obstacle.intersects(line) for obstacle in self.scene.values())
+
+
